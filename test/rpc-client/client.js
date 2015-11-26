@@ -106,7 +106,7 @@ describe('client', function() {
       client.start(function(err) {
         should.not.exist(err);
         client.proxies.sys.connector.whoAmIRemote.doService(null, function(err, sid) {
-          callbackCount++;
+        callbackCount++;
           serverId.should.equal(sid);
         });
       });
@@ -116,7 +116,7 @@ describe('client', function() {
         callbackCount.should.equal(1);
         client.stop();
         done();
-      }, WAIT_TIME);
+      }, WAIT_TIME*10);
     });
   });
 

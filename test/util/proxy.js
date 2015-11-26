@@ -63,14 +63,15 @@ describe('proxy', function() {
       var originCallCount = 0;
       var value = 1;
 
-      var cb = function(namespace, method, args, attach, invoke) {
-        callbackCount++;
-        invoke(args);
-      };
       var a = new A(value);
       a.add = function(num) {
         originCallCount++;
         this.value += num;
+      };
+
+      var cb = function(namespace, method, args, attach, invoke) {
+        callbackCount++;
+        a[method].apply(a, args);
       };
 
       //overwrite the origin function
@@ -130,23 +131,28 @@ describe('proxy', function() {
       var valueA = 1;
       var valueB = 2;
 
-      var cb = function(namespace, method, args, attach, invoke) {
-        callbackCount++;
-        invoke(args);
-      };
       var a = new A(valueA);
       var b = new B(valueB);
 
+      var cbA = function(namespace, method, args, attach, invoke) {
+        callbackCount++;
+        a[method].apply(a, args);
+      };
+      var cbB = function(namespace, method, args, attach, invoke) {
+        callbackCount++;
+        b[method].apply(b, args);
+      };
+
       var proxyA = Proxy.create({
         origin: a,
-        proxyCB: cb
+        proxyCB: cbA
       });
       var proxyB = Proxy.create({
         origin: b,
-        proxyCB: cb
+        proxyCB: cbB
       });
-      a.b = b;
-      b.a = a;
+      a.b=b;
+      b.a=a;
       proxyA.addB();
       proxyB.addA();
 
@@ -161,7 +167,7 @@ describe('proxy', function() {
 
       var cb = function(namespace, method, args, attach, invoke) {
         callbackCount++;
-        invoke(args);
+        a[method].apply(a, args);
       };
       var a = new A(value);
 

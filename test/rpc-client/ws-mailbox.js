@@ -86,7 +86,7 @@ describe('ws mailbox test', function() {
       mailbox.connect(tracer, function(err) {
         should.not.exist(err);
 
-        mailbox.send(tracer, msg, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(msg.args[0] + 1);
           mailbox.close();
@@ -124,19 +124,19 @@ describe('ws mailbox test', function() {
       mailbox.connect(tracer, function(err) {
         should.not.exist(err);
 
-        mailbox.send(tracer, msg1, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg1, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 1);
           callbackCount++;
         });
 
-        mailbox.send(tracer, msg2, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg2, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 2);
           callbackCount++;
         });
 
-        mailbox.send(tracer, msg3, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg3, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 3);
           callbackCount++;
@@ -181,19 +181,19 @@ describe('ws mailbox test', function() {
       mailbox.connect(tracer, function(err) {
         should.not.exist(err);
 
-        mailbox.send(tracer, msg1, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg1, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 1);
           callbackCount++;
         });
 
-        mailbox.send(tracer, msg2, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg2, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 2);
           callbackCount++;
         });
 
-        mailbox.send(tracer, msg3, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg3, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 3);
           callbackCount++;
@@ -247,19 +247,19 @@ describe('ws mailbox test', function() {
       mailbox.connect(tracer, function(err) {
         should.not.exist(err);
 
-        mailbox.send(tracer, msg1, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg1, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 1);
           callbackCount++;
         });
 
-        mailbox.send(tracer, msg2, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg2, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 2);
           callbackCount++;
         });
 
-        mailbox.send(tracer, msg3, null, function(tracer, err, res) {
+        mailbox.send(tracer, msg3, null, function(tracer, rpcSendErr, err, res) {
           should.exist(res);
           res.should.equal(value + 3);
           callbackCount++;
@@ -300,8 +300,8 @@ describe('ws mailbox test', function() {
       mailbox.connect(tracer, function(err) {
         should.not.exist(err);
         mailbox.close();
-        mailbox.send(tracer, msg, null, function(tracer, err, res) {
-          should.exist(err);
+        mailbox.send(tracer, msg, null, function(tracer, rpcSendErr, err, res) {
+          should.exist(rpcSendErr);
           done();
         });
       });

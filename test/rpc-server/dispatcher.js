@@ -1,5 +1,5 @@
 var lib = process.env.POMELO_RPC_COV ? 'lib-cov' : 'lib';
-var route = require('../../' + lib + '/rpc-server/dispatcher').route;
+var Dispatcher = require('../../lib/rpc-server/dispatcher');
 var should = require('should');
 var Tracer = require('../../lib/util/tracer');
 
@@ -22,6 +22,7 @@ var services = {
   }
 };
 
+//var route = dispatcher.route;
 var tracer = new Tracer(console, false);
 
 describe('dispatcher', function() {
@@ -34,8 +35,9 @@ describe('dispatcher', function() {
     var value = 1;
     var callbackCount = 0;
 
+    var dispatcher = new Dispatcher(services);
     var msg1 = {namespace: namespace1, service: serviceStr1, method: methodStr, args: [value]};
-    route(tracer, msg1, services, function(err, result) {
+    dispatcher.route(tracer, msg1, function(err, result) {
       should.not.exist(err);
       should.exist(result);
       result.should.equal(value + 1);
@@ -43,7 +45,7 @@ describe('dispatcher', function() {
     });
 
     var msg2 = {namespace: namespace2, service: serviceStr2, method: methodStr, args: [value]};
-    route(tracer, msg2, services, function(err, result) {
+    dispatcher.route(tracer, msg2, function(err, result) {
       should.not.exist(err);
       should.exist(result);
       result.should.equal(value + 2);
@@ -66,15 +68,16 @@ describe('dispatcher', function() {
     var value = 1;
     var callbackCount = 0;
 
+    var dispatcher = new Dispatcher(services);
     var msg1 = {namespace: namespace, service: serviceStr1, method: methodStr1, args: [value]};
-    route(tracer, msg1, services, function(err, result) {
+    dispatcher.route(tracer, msg1, function(err, result) {
       should.exist(err);
       should.not.exist(result);
       callbackCount++;
     });
 
     var msg2 = {namespace: namespace, service: serviceStr2, method: methodStr2, args: [value]};
-    route(tracer, msg2, services, function(err, result) {
+    dispatcher.route(tracer, msg2, function(err, result) {
       should.exist(err);
       should.not.exist(result);
       callbackCount++;

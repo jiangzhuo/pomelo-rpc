@@ -3,8 +3,9 @@ var MailStation = require('../../' + lib + '/rpc-client/mailstation');
 var should = require('should');
 var Server = require('../../').server;
 var Tracer = require('../../lib/util/tracer');
+var constants = require('../../lib/util/constants');
 
-var WAIT_TIME = 100;
+var WAIT_TIME = 1000;
 
 // proxy records
 var records = [
@@ -223,7 +224,7 @@ describe('mail station', function() {
 
       station.on('error', function(err) {
         should.exist(err);
-        ('fail to connect to remote server: ' + serverId).should.equal(err.message);
+        constants.RPC_ERROR.FAIL_CONNECT_SERVER.should.equal(err);
         eventCount++;
       });
 
@@ -236,10 +237,12 @@ describe('mail station', function() {
           'message was forward to blackhole.'.should.equal(err.message);
           callbackCount++;
         });
+        station
       });
+
       setTimeout(function() {
         eventCount.should.equal(1);
-        callbackCount.should.equal(1);
+        callbackCount.should.equal(0);
         station.stop();
         done();
       }, WAIT_TIME);
@@ -248,6 +251,7 @@ describe('mail station', function() {
 
   describe('#close', function() {
     it('should emit a close event for each mailbox close', function(done) {
+      this.timeout(5000);
       var closeEventCount = 0, i, l;
       var remoteIds = [];
       var mailboxIds = [];
@@ -315,6 +319,11 @@ describe('mail station', function() {
       };
 
       var tracer = new Tracer(null, false); 
+
+      station.on('error',function(err){
+        should.exist(err);
+        errorEventCount++;
+      });
 
       station.start(function(err) {
         station.stop();

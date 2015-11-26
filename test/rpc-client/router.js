@@ -1,18 +1,22 @@
 var lib = process.env.POMELO_RPC_COV ? 'lib-cov' : 'lib';
 var should = require('should');
-var route = require('../../' + lib + '/rpc-client/router').route;
+var route = require('../../lib/rpc-client/router').df;
 
 var WAIT_TIME = 20;
 
 describe('router', function() {
   var servers = {
-    'logic': [
-      {id: 'logic-server-1', host: 'localhost',  port: 3333},
-      {id: 'logic-server-2', host: 'localhost',  port: 4444}
-    ],
-    'area': [
-      {id: 'area-servere-1', host: 'localhost',  port: 5555}
-    ]
+    getServersByType:function(serverType){
+      return {
+        'logic': [
+          {id: 'logic-server-1', host: 'localhost',  port: 3333},
+          {id: 'logic-server-2', host: 'localhost',  port: 4444}
+        ],
+        'area': [
+          {id: 'area-servere-1', host: 'localhost',  port: 5555}
+        ]
+      } [serverType]
+    }
   };
 
   var msg = {
